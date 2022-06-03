@@ -2,6 +2,7 @@
 #include <stdlib.h>
 /**
 *main - print 0-789
+*Return: 0
 */
 int main(void)
 {
