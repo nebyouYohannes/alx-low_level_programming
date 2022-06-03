@@ -6,15 +6,26 @@
 */
 int main(void)
 {
-int i;
-for (i = 1; i <= 99; i++)
+int c;
+int d = 0;
+while (d < 10)
 {
-putchar((i / 10) + '0');
-putchar((i % 10) + '0');
-if (i == 89)
-break;
+c = 0;
+while (c < 10)
+{
+if (d != c && d < c)
+{
+putchar('0' + d);
+putchar('0' + c);
+if (c + d != 17)
+{
 putchar(',');
 putchar(' ');
+}
+}
+c++;
+}
+d++;
 }
 putchar('\n');
 return (0);
