@@ -1,94 +1,66 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "main.h"
+#include <stdlib.h>
 /**
-*word_len - finds the length of a word
-*@str:string to test
+* ch_free_grid - frees a 2 dimensional array.
+* @grid: multidimensional array of char.
+* @height: height of the array.
 *
-*Return:int
+* Return: no return
 */
-int word_len(char *str)
+void ch_free_grid(char **grid, unsigned int height)
 {
-int i = 0, len = 0;
-while (*(str + i) && *(str + i) != ' ')
+if (grid != NULL && height != 0)
 {
-len++;
-i++;
+for (; height > 0; height--)
+free(grid[height]);
+free(grid[height]);
+free(grid);
 }
-return (len);
 }
 /**
-*word_count - counts the number of words
+* strtow - splits a string into words.
+* @str: string.
 *
-*@str:input
-*
-*Return:(no. of words)
-*
-*/
-int word_count(char *str)
-{
-int i = 0, len = 0, count = 0;
-for (i = 0; *(str + i); i++)
-{
-len++;
-}
-for (i = 0; i < len; i++)
-{
-if (*(str + i) != ' ')
-{
-count++;
-i += word_len(str + i);
-}
-}
-return (count);
-}
-/**
-*strtow - splits a string into words
-*
-*@str:input
-*
-*Return:0 - success
-*
+* Return: pointer of an array of integers
 */
 char **strtow(char *str)
 {
-int i, words, w, letters, l;
-char **p;
-if (str == NULL || str[0] == '\0')
+char **aout;
+unsigned int c, height, i, j, a1;
+if (str == NULL || *str == '\0')
+return (NULL);
+for (c = height = 0; str[c] != '\0'; c++)
 {
+if (str[c] != ' ' && (str[c + 1] == ' ' || str[c + 1] == '\0'))
+height++;
+}
+aout = malloc((height + 1) * sizeof(char *));
+if (aout == NULL || height == 0)
+{
+free(aout);
 return (NULL);
 }
-words = word_count(str);
-if (words == 0)
+for (i = a1 = 0; i < height; i++)
 {
+for (c = a1; str[c] != '\0'; c++)
+{
+if (str[c] == ' ')
+a1++;
+if (str[c] != ' ' && (str[c + 1] == ' ' || str[c + 1] == '\0'))
+{
+aout[i] = malloc((c - a1 + 2) * sizeof(char));
+if (aout[i] == NULL)
+{
+ch_free_grid(aout, i);
 return (NULL);
 }
-p = malloc(sizeof(char *) * (words + 1));
-if (p == NULL)
-{
-return (NULL);
+break;
 }
-for (i = 0; i < words; i++)
-{
-while (*(str + w) == ' ')
-{
-w++;
 }
-letters = word_len(str + w);
-p[i] = malloc(sizeof(char) * (letters + 1));
-if (p[i] == NULL)
-{
-for (; i >= 0; i--)
-free(p[i]);
-free(p);
-return (NULL);
+for (j = 0; a1 <= c; a1++, j++)
+aout[i][j] = str[a1];
+aout[i][j] = '\0';
 }
-for (l = 0; l < letters; l++)
-{
-p[i][l] = str[w++];
-}
-p[i][l] = '\0';
-}
-p[i] = NULL;
-return (p);
+aout[i] = NULL;
+return (aout);
 }
